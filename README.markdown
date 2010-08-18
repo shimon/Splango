@@ -94,10 +94,11 @@ admin UI for viewing simple funnel reports on the results.
 
         (r'^splango/', include('splango.urls')),
 
-* Ensure jQuery is available on all text/html responses. Otherwise, (1)
-  splango will not work and (2) you will get annoying popups whenever
+* Ensure jQuery is available on all text/html responses. Otherwise splango
+  will not work. Splango will remind you of this by putting annoying
+  javascript alert() messages on such pages if settings.DEBUG is true.
 
-* Finally, go to /splango/admin to view experiments
+* Finally, go to /splango/admin to create and view experiments.
 
 
 ## Usage Notes
