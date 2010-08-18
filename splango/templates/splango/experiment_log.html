@@ -1,0 +1,58 @@
+{% extends 'admin/base.html' %}
+{% load i18n %}
+
+{% block title %}Splango: {{title}}{% endblock %}
+
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin/">{% trans 'Home' %}</a> &rsaquo; <a href="{% url splango-admin %}">Splango</a>
+
+&rsaquo; <a href="{% url splango-experiment-detail expname=exp.name %}">{{exp.name}}</a>
+
+{% if title %} &rsaquo; {{ title }}{% endif %}
+</div>{% endblock %}
+
+
+{% block content %}
+
+{% if activities %}
+
+<table>
+  <tr>
+    <th>Time</th> 
+    <th>Subject</th> 
+    <th>Type</th>
+    <th colspan="3">Data</th>
+  </tr>
+
+  {% for act in activities %}
+  <tr style="background-color:{% cycle #f9f9f9,#f0f0f0 %}">
+    {% if act.variant %}
+    {# activity is an enrollment #}
+    <td>{{act.created}}</td>
+    <td>{{act.subject}}</td>
+    <td>Enrollment</td>
+    <td colspan="3">&nbsp;</td>
+
+    {% else %}
+    {# activity is a goal record #}
+    <td>{{act.created}}</td>
+    <td>{{act.subject}}</td>
+    <td>{{act.goal}}</td>
+    <td>{{act.req_REMOTE_ADDR}}</td>
+    <td>{{act.req_path}}</td>
+    <td title="referer">{{act.req_HTTP_REFERER|default:"-"}}</td>
+
+    {% endif %}
+  </tr>
+  {% endfor %}
+
+</table>
+
+{% else %}
+
+There is no activity logged for this experiment/variant/goal yet.
+
+{% endif %}
+
+{% endblock %}
+
+

@@ -1,0 +1,34 @@
+{% extends 'admin/base.html' %}
+{% load i18n %}
+
+{% block title %}Splango: Overview{% endblock %}
+
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin/">{% trans 'Home' %}</a> &rsaquo; <a href="{% url splango-admin %}">Splango</a>
+
+{% if parent_url and parent_title %} &rsaquo; <a href="{{parent_url}}">{{ parent_title }}</a>{% endif %}
+
+{% if title %} &rsaquo; {{ title }}{% endif %}
+</div>{% endblock %}
+
+
+{% block content %}
+<h2>Active Experiments</h2>
+{% if exps %}
+<ul>
+  {% for exp in exps %}
+  <li><a href="{% url splango-experiment-detail expname=exp.name %}">{{exp}}</a>
+    {% if exp.reports %}
+    <ul>
+      {% for rept in exp.reports %}
+      <li><a href="{% url splango-experiment-report expname=exp.name report_id=rept.id %}">{{rept.title}}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+No experiments yet.
+{% endif %}
+
+{% endblock %}
