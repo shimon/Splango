@@ -1,13 +1,11 @@
-=========================================
-Splango: Drop-in Split Testing for Django
-=========================================
+# Splango: Drop-in Split Testing for Django
 
 Splango is designed to help you take the first steps with split (A/B)
 testing with minimal friction.  It allows you to instantly declare and run a
 split test experiment in your templates or in python code, and provides an
 admin UI for viewing simple funnel reports on the results.
 
-TEMPLATE EXAMPLE:
+## Template Example
 
     {% load splangotags %}
 
@@ -32,69 +30,69 @@ TEMPLATE EXAMPLE:
     </a>
 
 
+## Python View Example
 
-PYTHON VIEW EXAMPLE:
+    def mypage(request):
+        exp = request.experiments
 
-def mypage(request):
-    exp = request.experiments
+        expvariant = exp.declare_and_enroll("call_to_action", ["a","b"])
 
-    expvariant = exp.declare_and_enroll("call_to_action", ["a","b"])
+        if expvariant == "a":
+            call_to_action_label = "try it"
+        elif expvariant == "b":
+            call_to_action_label = "this might not suck"
 
-    if expvariant == "a":
-        call_to_action_label = "try it"
-    elif expvariant == "b":
-        call_to_action_label = "this might not suck"
+        if request.method == "POST":
+            form = PleaseDoThisForm(request.POST)
 
-    if request.method == "POST":
-        form = PleaseDoThisForm(request.POST)
+            if form.is_valid():
+                exp.log_goal("pleasedoform.completed")
+                return HttpResponseRedirect(...)
 
-        if form.is_valid():
-            exp.log_goal("pleasedoform.completed")
-            return HttpResponseRedirect(...)
+        else:
+            form = PleaseDoThisForm()
+            exp.log_goal("pleasedoform.seen")
 
-    else:
-        form = PleaseDoThisForm()
-        exp.log_goal("pleasedoform.seen")
-
-    return render_to_response("mytemplate.html", { 
-       "call_to_action_label": call_to_action_label },
-       RequestContext(request))
+        return render_to_response("mytemplate.html", { 
+           "call_to_action_label": call_to_action_label },
+           RequestContext(request))
 
 
-SPECIAL MAGIC:
+## Special Magic
+
 * In order to filter out bots, Splango injects a javascript fragment into
   your HTTP response.
 
 
-INSTALLATION:
+## Installation
 
 * Ensure you have the dependencies:
-  - django's session package
-  - django's admin for viewing results
-  - jQuery
+  * django's session package
+  * django's admin for viewing results
+  * jQuery
 
 * Put the splango directory somewhere in your PYTHON_PATH.
 
 * In your project's settings.py:
 
-  - add "splango" to INSTALLED_APPS
+  * add "splango" to INSTALLED_APPS
 
-  - add this to your MIDDLEWARE_CLASSES after the session and auth
+  * add this to your MIDDLEWARE_CLASSES after the session and auth
     middleware:
 
-    'splango.middleware.ExperimentsMiddleware'
+        'splango.middleware.ExperimentsMiddleware'
 
-  - optionally, define a goal to be logged when the first visit to your site
+  * optionally, define a goal to be logged when the first visit to your site
     is made:
 
-    SPLANGO_FIRST_VISIT_GOAL = "firstvisit"
+        SPLANGO_FIRST_VISIT_GOAL = "firstvisit"
 
     If this is defined, splango will automatically log the goal "firstvisit"
     as being completed on the user's first request.
 
 * In your urls.py, include the splango urls and admin_urls modules:
 
-    (r'^splango/', include('splango.urls')),
+        (r'^splango/', include('splango.urls')),
 
 * Ensure jQuery is available on all text/html responses. Otherwise, (1)
   splango will not work and (2) you will get annoying popups whenever
@@ -102,10 +100,10 @@ INSTALLATION:
 * Finally, go to /splango/admin to view experiments
 
 
-USAGE NOTES:
+## Usage Notes
+
 * The names of experiments and goals are their sole identifier. This keeps
   things simple, but also means that typos can mess things up.
 
 * Hypotheses within an experiment must have unique names, but you can reuse
   a hypothesis name (e.g. "control") in multiple experiments if you wish.
-
