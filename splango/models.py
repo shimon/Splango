@@ -71,6 +71,8 @@ class GoalRecord(models.Model):
     req_REMOTE_ADDR = models.IPAddressField(null=True, blank=True)
     req_path = models.CharField(max_length=255, null=True, blank=True)
 
+    extra = models.CharField(max_length=255, null=True, blank=True)
+
     class Meta:
         unique_together= (('subject', 'goal'),)
         # never record the same goal twice for a given subject
@@ -83,12 +85,13 @@ class GoalRecord(models.Model):
             req_path=request.path[:255])
 
     @classmethod
-    def record(cls, subject, goalname, request_info):
+    def record(cls, subject, goalname, request_info, extra=None):
         goal, created = Goal.objects.get_or_create(name=goalname)
 
         gr,created = cls.objects.get_or_create(subject=subject, 
                                                goal=goal,
-                                               defaults=request_info)
+                                               defaults=request_info,
+                                               extra=extra)
         return gr
 
     @classmethod

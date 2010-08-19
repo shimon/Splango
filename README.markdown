@@ -58,10 +58,18 @@ admin UI for viewing simple funnel reports on the results.
            RequestContext(request))
 
 
-## Special Magic
+## Things to Note
 
 * In order to filter out bots, Splango injects a javascript fragment into
-  your HTTP response.
+  your HTTP response. Only clients that have a Django session and can run
+  javascript will be tracked in experiments.
+
+* When a user logs in or registers, any experiment enrollments created while
+  the user was an anonymous Subject will be merged into a Subject associated
+  with the User. In case of conflict, enrollments previously associated with
+  a logged-in Subject will override anonymous enrollments. In other words,
+  Splango tries to be consistent as to what it presented to a particular
+  human, as long as we can identify them.
 
 
 ## Installation
