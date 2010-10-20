@@ -68,7 +68,8 @@ class RequestExperimentManager:
         elif action == "log_goal":
             g = GoalRecord.record(self.get_subject(), 
                                   params["goal_name"], 
-                                  params["request_info"])
+                                  params["request_info"],
+                                  extra=params.get("extra"))
 
             logging.info("SPLANGO! goal! %s" % str(g))
 
@@ -208,9 +209,11 @@ class RequestExperimentManager:
         return v
 
 
-    def log_goal(self, goal_name):
+    def log_goal(self, goal_name, extra=None):
 
         request_info = GoalRecord.extract_request_info(self.request)
+
         self.enqueue("log_goal", { "goal_name": goal_name,
-                                   "request_info": request_info })
+                                   "request_info": request_info,
+                                   "extra": extra })
 

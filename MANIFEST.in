@@ -1,2 +1,2 @@
 include README.markdown
-recursive-include splango/templates
+recursive-include splango/templates *.html

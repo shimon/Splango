@@ -9,5 +9,4 @@ setup(name='Splango',
       author_email='shimon@rura.org',
       url='http://github.com/shimon/Splango',
       packages=['splango','splango.templatetags'],
-      package_data={'splango': ['splango/templates/splango/*.html']},
-     )
+      )
