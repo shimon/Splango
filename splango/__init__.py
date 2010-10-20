@@ -2,7 +2,7 @@ from django.conf import settings
 
 import logging
 from django.utils.encoding import smart_unicode
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, NoReverseMatch
 
 from splango.models import Subject, Experiment, Enrollment, GoalRecord
 
@@ -107,7 +107,12 @@ class RequestExperimentManager:
             prejs = "try { "
             postjs = ' } catch(e) { alert("DEBUG notice: Splango encountered a javascript error when attempting to confirm this user as a human. Is jQuery loaded?\\n\\nYou may notice inconsistent experiment enrollments until this is fixed.\\n\\nDetails:\\n"+e.toString()); }'
 
-        return """<script type='text/javascript'>%sjQuery.get("%s");%s</script>""" % (prejs, reverse("splango-confirm-human"), postjs)
+        try:
+            url = reverse("splango-confirm-human")
+        except NoReverseMatch:
+            url = "/splango/confirm_human/"
+
+        return """<script type='text/javascript'>%sjQuery.get("%s");%s</script>""" % (prejs, url, postjs)
         
 
     def confirm_human(self, reqdata=None):
