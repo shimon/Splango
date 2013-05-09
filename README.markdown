@@ -116,3 +116,7 @@ admin UI for viewing simple funnel reports on the results.
 
 * Hypotheses within an experiment must have unique names, but you can reuse
   a hypothesis name (e.g. "control") in multiple experiments if you wish.
+
+## License
+
+As documented in the LICENSE file, Splango is available for free use and modification under an MIT-style license.
